@@ -1,5 +1,5 @@
-import { call, CallEffect, select, SelectEffect, takeEvery } from 'redux-saga/effects';
-import { selectUser } from './authSlice';
+import { call, CallEffect, put, PutEffect, select, SelectEffect, takeEvery } from 'redux-saga/effects';
+import { selectUser, setResponseData } from './authSlice';
 
 interface User {
 	email: string
@@ -7,14 +7,14 @@ interface User {
 }
 
 interface ResponseObject {
-	token: string
+	accessToken: string
 	user: User		
 }
 
 function* login(): Generator<
-		SelectEffect | CallEffect | Promise<ResponseObject>,
+		SelectEffect | CallEffect | Promise<ResponseObject> | PutEffect,
 		void,
-		Response
+		Response & ResponseObject
 	> {
 	const user = yield select(selectUser);
 	try {
@@ -29,14 +29,14 @@ function* login(): Generator<
     	})
 		)
 		const data = yield response.json();
-		console.log(data);
+		yield put(setResponseData(data));
 	} catch (e) {
 		console.log(e);
 	}
 }
 
 function* watchLogin() {
-	yield takeEvery('TOKEN_REQUESTED', login)
+	yield takeEvery('LOGIN', login)
 }
 
 export default watchLogin;

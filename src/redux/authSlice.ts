@@ -1,8 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
+interface ResponseData {
+  accessToken: string
+  user: {
+    email: string
+    id: number
+  }
+}
+
 export interface AuthState {
-  token: string;
+  responseData: ResponseData;
   user: {
     email: string,
     password: string,
@@ -10,7 +18,13 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: '',
+  responseData: {
+    accessToken: '',
+    user: {
+      email: '',
+      id: 0,
+    }
+  },
   user: {
     email: '',
     password: '',
@@ -21,8 +35,8 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
+    setResponseData: (state, action) => {
+      state.responseData = action.payload;
     },
     setUser: (state, action) => {
       state.user = action.payload;
@@ -30,9 +44,9 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setToken, setUser } = authSlice.actions;
+export const { setResponseData, setUser } = authSlice.actions;
 
-export const selectToken = (state: RootState) => state.auth.token;
+export const selectResponseData = (state: RootState) => state.auth.responseData;
 export const selectUser = (state: RootState) => state.auth.user;
 
 export default authSlice.reducer;
