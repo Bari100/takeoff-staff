@@ -30,6 +30,7 @@ function* login(): Generator<
 		)
 		const data = yield response.json();
 		yield put(setResponseData(data));
+		localStorage.setItem('token', data.accessToken);
 	} catch (e) {
 		console.log(e);
 	}

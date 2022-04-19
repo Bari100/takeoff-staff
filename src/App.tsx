@@ -1,20 +1,22 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import Contacts from './components/Contacts';
-import './App.css';
 import { useEffect } from 'react';
+import { useAppSelector } from './utils/hooks';
+import { selectResponseData } from './redux/authSlice';
+import './App.css';
 
 function App() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token')
-  
+  const { accessToken } = useAppSelector(selectResponseData);
+
   useEffect(() => {
-    if (!token || token === 'undefined') {
+    if (!accessToken || accessToken === 'undefined') {
       navigate('/login');
     } else {
       navigate('/contacts');
     }
-  }, [token])
+  }, [accessToken])
 
   return (
     <Routes>

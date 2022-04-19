@@ -1,12 +1,8 @@
 import { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
-import { selectResponseData, selectUser, setUser } from "../../redux/authSlice";
+import { useAppDispatch } from "../../utils/hooks";
+import { setUser } from "../../redux/authSlice";
 
 function Login() {
-  const navigate = useNavigate();
-	const responseData = useAppSelector(selectResponseData);
-  const { accessToken } = responseData;
   const dispatch = useAppDispatch();
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -25,11 +21,6 @@ function Login() {
       })
     );
     dispatch({type: 'LOGIN'});
-  }
-
-  if (accessToken) {
-    localStorage.setItem('token', accessToken);
-    navigate('/contacts');
   }
 
   return (

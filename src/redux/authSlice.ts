@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
 interface ResponseData {
-  accessToken: string
+  accessToken: string | null
   user: {
     email: string
     id: number
@@ -19,7 +19,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
   responseData: {
-    accessToken: '',
+    accessToken: localStorage.getItem('token'),
     user: {
       email: '',
       id: 0,
