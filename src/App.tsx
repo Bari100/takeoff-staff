@@ -1,6 +1,6 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
-import Contacts from './components/Contacts';
+import ContactsList from './components/ContactsList';
 import { useEffect } from 'react';
 import { useAppSelector } from './utils/hooks';
 import { selectResponseData } from './redux/authSlice';
@@ -19,10 +19,12 @@ function App() {
   }, [accessToken])
 
   return (
-    <Routes>
-      <Route path='login' element={<Login />} />
-      <Route path='contacts' element={<Contacts />} />
-    </Routes>
+    <div className="App">
+      <Routes>
+        <Route path='login' element={<Login />} />
+        <Route path='contacts' element={<ContactsList />} />
+      </Routes>
+    </div>
   );
 }
 
