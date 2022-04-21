@@ -1,7 +1,7 @@
 import React, { FormEventHandler } from 'react';
 
 interface FormTextEmailProps {
-  onSubmit?: FormEventHandler<HTMLFormElement>
+  onSubmit: FormEventHandler<HTMLFormElement>
   buttonText: string
 }
 

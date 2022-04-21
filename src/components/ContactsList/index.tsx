@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Contact from './Contact';
 import ContactForm from '../ContactForm';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
-import { selectContacts, setContacts } from '../../redux/contactsSlice';
+import { selectContacts } from '../../redux/contactsSlice';
 
 function Contacts() {
   const dispatch = useAppDispatch();
+  const [contactId, setContactId] = useState();
   
   useEffect(() => {
 		dispatch({type: 'GET_CONTACTS'});
@@ -28,11 +29,24 @@ function Contacts() {
     dispatch({type: 'ADD_CONTACT', contact})
   }, [contactsList]);
 
-  function removeItem(id: number) {
-    dispatch({type: 'REMOVE_CONTACT', id})
-  }
+  const removeItem = (contactId: number) => {
+    dispatch({type: 'REMOVE_CONTACT', contactId});
+  };
 
-  console.log(contactsList);
+  const editItem = (e: any) => {
+		e.preventDefault();
+    const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
+    const firstName = target.firstName.value;
+    const lastName = target.lastName.value;
+    const contact = {
+      firstName,
+      lastName,
+    }
+		dispatch({type: 'EDIT_CONTACT', payload: {contact, contactId}});
+	}
 
   return (
     <div>
@@ -40,8 +54,11 @@ function Contacts() {
         {contactsList.map((contactItem) => (
           <Contact
             key={contactItem.id}
+            contactId={contactItem.id}
+            setContactId={setContactId}
             contactItem={contactItem}
             removeItem={() => removeItem(contactItem.id)}
+            editItem={editItem}
           />
         ))}
       </ul>

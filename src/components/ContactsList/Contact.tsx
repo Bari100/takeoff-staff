@@ -4,9 +4,8 @@ import React, {
 import ContactForm from '../ContactForm';
 
 function Contact({
-	contactItem, removeItem,
+	contactId, setContactId, contactItem, removeItem, editItem,
 }: any) {
-
 	const [edit, setEdit] = useState(false);
 
 	return (
@@ -18,8 +17,15 @@ function Contact({
 				{contactItem.lastName}
 			</div>
 			<button type="button" onClick={removeItem}>remove</button>
-			<button type="button" onClick={() => setEdit(true)}>edit</button>
-			{edit && <ContactForm buttonText="edit" />}
+			<button type="button" onClick={() => {
+						setEdit(true)
+						setContactId(contactId)
+					}
+				}
+			>
+				edit
+			</button>
+			{edit && <ContactForm onSubmit={editItem} buttonText="edit" />}
 		</li>
 	);
 }

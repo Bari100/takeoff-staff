@@ -15,6 +15,7 @@ const initialState = {
 		}
 	],
 	contact,
+	edit: false,
 }
 
 export const contactsSlice = createSlice({
@@ -26,13 +27,17 @@ export const contactsSlice = createSlice({
     },
 		setContact: (state, action) => {
       state.contact = action.payload;
-    }
+    },
+		setEdit: (state, action) => {
+			state.edit = action.payload;
+		}
   },
 });
 
-export const { setContacts, setContact } = contactsSlice.actions;
+export const { setContacts, setContact, setEdit } = contactsSlice.actions;
 
 export const selectContacts = (state: RootState) => state.contacts.contacts;
 export const selectContact = (state: RootState) => state.contacts.contact;
+export const selectEdit = (state: RootState) => state.contacts.edit;
 
 export default contactsSlice.reducer;

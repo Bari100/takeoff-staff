@@ -2,7 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import authReducer from './authSlice';
 import contactsReducer from './contactsSlice';
-import watchFetchToken from './sagas';
+import rootSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -14,7 +14,7 @@ export const store = configureStore({
   middleware: [sagaMiddleware],
 });
 
-sagaMiddleware.run(watchFetchToken);
+sagaMiddleware.run(rootSaga);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

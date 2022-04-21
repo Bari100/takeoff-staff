@@ -1,22 +1,30 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { call, CallEffect, put, PutEffect, select, SelectEffect, takeEvery } from 'redux-saga/effects';
-import { selectUser, setResponseData } from './authSlice';
-import { selectContact, setContacts } from './contactsSlice';
+import { all, call, CallEffect, put, PutEffect, takeEvery } from 'redux-saga/effects';
+import { setResponseData } from './authSlice';
+import { setContacts } from './contactsSlice';
 
 interface User {
 	email: string
 	password: string
 }
 
-interface ResponseObject {
+interface AuthResponse {
 	accessToken: string
 	user: User		
 }
 
+interface Contact {
+	firstName: string
+	lastName: string
+	id: number
+}
+
+type ContactsResponse = Contact[]
+
 function* login({ user }: AnyAction): Generator<
-		SelectEffect | CallEffect | Promise<ResponseObject> | PutEffect,
+		CallEffect | Promise<AuthResponse> | PutEffect,
 		void,
-		Response & ResponseObject
+		Response & AuthResponse
 	> {
 	try {
 		const response = yield call(() => fetch(
@@ -37,7 +45,11 @@ function* login({ user }: AnyAction): Generator<
 	}
 }
 
-function* getContacts(): any {
+function* getContacts(): Generator<
+		CallEffect | Promise<ContactsResponse> | PutEffect,
+		void,
+		Response & ContactsResponse
+	> {
 	try {
 		const response = yield call(() => fetch(
 			'http://localhost:3004/contacts',
@@ -55,7 +67,7 @@ function* getContacts(): any {
 	}
 }
 
-function* addContact({ contact }: AnyAction): any {
+function* addContact({ contact }: AnyAction): Generator<CallEffect> {
 	try {
 		yield call(() => fetch(
 			'http://localhost:3004/contacts',
@@ -73,10 +85,10 @@ function* addContact({ contact }: AnyAction): any {
 	}
 }
 
-function* removeContact({ id }: AnyAction): any {
+function* removeContact({ contactId }: AnyAction): Generator<CallEffect> {
 	try {
 		yield call(() => fetch(
-			`http://localhost:3004/contacts/${id}`,
+			`http://localhost:3004/contacts/${contactId}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -90,11 +102,33 @@ function* removeContact({ id }: AnyAction): any {
 	}
 }
 
-function* watchLogin() {
-	yield takeEvery('LOGIN', login);
-	yield takeEvery('GET_CONTACTS', getContacts);
-	yield takeEvery('ADD_CONTACT', addContact);
-	yield takeEvery('REMOVE_CONTACT', removeContact);
+function* editContact({ payload }: AnyAction): Generator<CallEffect> {
+	const { contact, contactId } = payload;
+	try {
+		yield call(() => fetch(
+			`http://localhost:3004/contacts/${contactId}`,
+			{
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify(contact),
+    	})
+		);
+		yield call(getContacts);
+	} catch (e) {
+		console.log(e);
+	}
 }
 
-export default watchLogin;
+function* rootSaga() {
+	yield all([
+		takeEvery('LOGIN', login),
+		takeEvery('GET_CONTACTS', getContacts),
+		takeEvery('ADD_CONTACT', addContact),
+		takeEvery('REMOVE_CONTACT', removeContact),
+		takeEvery('EDIT_CONTACT', editContact),
+	])
+}
+
+export default rootSaga;
