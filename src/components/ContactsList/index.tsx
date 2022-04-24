@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Contact from './Contact';
 import ContactForm from '../ContactForm';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
-import { selectContacts } from '../../redux/contactsSlice';
+import { selectContacts, selectEditId, setEditId } from '../../redux/contactsSlice';
 
 function Contacts() {
   const dispatch = useAppDispatch();
@@ -13,6 +13,7 @@ function Contacts() {
 	}, [])
 
   const contactsList = useAppSelector(selectContacts);
+  const editId = useAppSelector(selectEditId);
 
   const addItem = useCallback((e:any) => {
     e.preventDefault();
@@ -45,6 +46,7 @@ function Contacts() {
       firstName,
       lastName,
     }
+    dispatch(setEditId(undefined));
 		dispatch({type: 'EDIT_CONTACT', payload: {contact, contactId}});
 	}
 
@@ -58,7 +60,9 @@ function Contacts() {
             setContactId={setContactId}
             contactItem={contactItem}
             removeItem={() => removeItem(contactItem.id)}
+            editId={editId}
             editItem={editItem}
+            formRef={formRef}
           />
         ))}
       </ul>

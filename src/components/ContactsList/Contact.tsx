@@ -1,12 +1,14 @@
 import React, {
 	useState,
 } from 'react';
+import { useAppDispatch } from '../../utils/hooks';
 import ContactForm from '../ContactForm';
+import { setEditId } from '../../redux/contactsSlice';
 
 function Contact({
-	contactId, setContactId, contactItem, removeItem, editItem,
+	contactId, setContactId, contactItem, removeItem, editId, editItem,
 }: any) {
-	const [edit, setEdit] = useState(false);
+	const dispatch = useAppDispatch();
 
 	return (
 		<li>
@@ -17,15 +19,24 @@ function Contact({
 				{contactItem.lastName}
 			</div>
 			<button type="button" onClick={removeItem}>remove</button>
-			<button type="button" onClick={() => {
-						setEdit(true)
+			<button type="button" onClick={
+				() => {
+						dispatch(setEditId(contactId));
 						setContactId(contactId)
 					}
 				}
 			>
 				edit
 			</button>
-			{edit && <ContactForm onSubmit={editItem} buttonText="edit" />}
+			{editId === contactId &&
+				<ContactForm 
+					onSubmit={editItem} 
+					buttonText="edit" 
+					firstName={contactItem.firstName} 
+					lastName={contactItem.lastName}
+					cancelButton
+				/>
+			}
 		</li>
 	);
 }
