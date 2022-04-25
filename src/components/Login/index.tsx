@@ -1,5 +1,5 @@
-import { FormEvent } from "react";
-import { useAppDispatch } from "../../utils/hooks";
+import React, { FormEvent } from 'react';
+import { useAppDispatch } from '../../utils/hooks';
 
 function Login() {
   const dispatch = useAppDispatch();
@@ -15,10 +15,10 @@ function Login() {
 
     const user = {
       email,
-      password
-    }
-    dispatch({type: 'LOGIN', user});
-  }
+      password,
+    };
+    dispatch({ type: 'LOGIN', user });
+  };
 
   return (
     <form onSubmit={onSubmit}>
@@ -26,7 +26,7 @@ function Login() {
       <input type="password" name="password" />
       <button type="submit">submit</button>
     </form>
-  )
+  );
 }
 
 export default Login;

@@ -2,26 +2,22 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
 const initialState = {
-	contacts: [
-		{
-			id: 0,
-			firstName: '',
-			lastName: '',
-		}
-	],
-	editId: undefined,
-}
+  contacts: [
+    {
+      firstName: '',
+      lastName: '',
+      id: -1,
+    },
+  ],
+  editId: -1,
+};
 
 export const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    setContacts: (state, action) => {
-      state.contacts = action.payload;
-    },
-		setEditId: (state, action) => {
-			state.editId = action.payload;
-		}
+    setContacts: (state, action) => action.payload,
+    setEditId: (state, action) => action.payload,
   },
 });
 

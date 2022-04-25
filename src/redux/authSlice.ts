@@ -19,7 +19,7 @@ const initialState: AuthState = {
     user: {
       email: '',
       id: 0,
-    }
+    },
   },
 };
 
@@ -27,9 +27,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setResponseData: (state, action) => {
-      state.responseData = action.payload;
-    },
+    setResponseData: (state, action) => action.payload,
   },
 });
 
