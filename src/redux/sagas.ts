@@ -2,8 +2,10 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   all, call, CallEffect, put, PutEffect, takeEvery,
 } from 'redux-saga/effects';
-import { setResponseData } from './authSlice';
-import { setContacts } from './contactsSlice';
+import { ContactType } from '../types/contacts';
+import fetchAPI from '../utils/fetchAPI';
+import { setAuthErrorData, setAuthResponseData } from './authSlice';
+import { setContactInteractionError, setContacts, setContactsError } from './contactsSlice';
 
 interface User {
   email: string
@@ -15,35 +17,20 @@ interface AuthResponse {
   user: User
 }
 
-interface Contact {
-  firstName: string
-  lastName: string
-  id: number
-}
-
-type ContactsResponse = Contact[]
+type ContactsResponse = ContactType[]
 
 function* login({ user }: AnyAction): Generator<
   CallEffect | Promise<AuthResponse> | PutEffect,
   void,
   Response & AuthResponse
 > {
-  try {
-    const response = yield call(() => fetch(
-      'http://localhost:3000/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(user),
-      },
-    ));
-    const data = yield response.json();
-    yield put(setResponseData(data));
+  const response = yield call(fetchAPI, 'login', 'POST', user);
+  const data = yield response.json();
+  if (response.ok) {
+    yield put(setAuthResponseData(data));
     localStorage.setItem('token', data.accessToken);
-  } catch (e) {
-    console.log(e);
+  } else {
+    yield put(setAuthErrorData(data));
   }
 }
 
@@ -52,74 +39,42 @@ function* getContacts(): Generator<
   void,
   Response & ContactsResponse
   > {
-  try {
-    const response = yield call(() => fetch(
-      'http://localhost:3004/contacts',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-      },
-    ));
-    const data = yield response.json();
+  const response = yield call(fetchAPI, 'contacts', 'GET');
+  const data = yield response.json();
+  if (response.ok) {
     yield put(setContacts(data));
-  } catch (e) {
-    console.log(e);
+  } else {
+    yield put(setContactsError(true));
   }
 }
 
-function* addContact({ contact }: AnyAction): Generator<CallEffect> {
-  try {
-    yield call(() => fetch(
-      'http://localhost:3004/contacts',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(contact),
-      },
-    ));
+function* addContact({ contact }: AnyAction): Generator<CallEffect | PutEffect, void, Response> {
+  const response = yield call(fetchAPI, 'contacts', 'POST', contact);
+  if (response.ok) {
     yield call(getContacts);
-  } catch (e) {
-    console.log(e);
+  } else {
+    yield put(setContactInteractionError(true));
   }
 }
 
-function* removeContact({ contactId }: AnyAction): Generator<CallEffect> {
-  try {
-    yield call(() => fetch(
-      `http://localhost:3004/contacts/${contactId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-      },
-    ));
+function* removeContact({ contactId }: AnyAction): Generator<
+  CallEffect | PutEffect, void, Response
+> {
+  const response = yield call(fetchAPI, `contacts/${contactId}`, 'DELETE');
+  if (response.ok) {
     yield call(getContacts);
-  } catch (e) {
-    console.log(e);
+  } else {
+    yield put(setContactInteractionError(true));
   }
 }
 
-function* editContact({ payload }: AnyAction): Generator<CallEffect> {
+function* editContact({ payload }: AnyAction): Generator<CallEffect | PutEffect, void, Response> {
   const { contact, contactId } = payload;
-  try {
-    yield call(() => fetch(
-      `http://localhost:3004/contacts/${contactId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(contact),
-      },
-    ));
+  const response = yield call(fetchAPI, `contacts/${contactId}`, 'PUT', contact);
+  if (response.ok) {
     yield call(getContacts);
-  } catch (e) {
-    console.log(e);
+  } else {
+    yield put(setContactInteractionError(true));
   }
 }
 

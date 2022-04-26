@@ -4,17 +4,12 @@ import React, {
 import { useAppDispatch } from '../../utils/hooks';
 import ContactForm from '../ContactForm';
 import { setEditId } from '../../redux/contactsSlice';
-
-interface ContactItem {
-  firstName: string
-  lastName: string
-  id: number
-}
+import { ContactType } from '../../types/contacts';
 
 interface ContactProps {
   contactId: number
   setContactId: Dispatch<SetStateAction<number>>
-  contactItem: ContactItem
+  contactItem: ContactType
   removeItem: MouseEventHandler<HTMLButtonElement>
   editId: number
   editItem: FormEventHandler<HTMLFormElement>
@@ -27,13 +22,8 @@ function Contact({
 
   return (
     <li>
-      <div>
-        {contactItem.firstName}
-      </div>
-      <div>
-        {contactItem.lastName}
-      </div>
-      <button type="button" onClick={removeItem}>remove</button>
+      {`${contactItem.firstName} ${contactItem.lastName}`}
+
       <button
         type="button"
         onClick={() => {
@@ -43,6 +33,7 @@ function Contact({
       >
         edit
       </button>
+      <button type="button" onClick={removeItem}>remove</button>
       {editId === contactId && (
         <ContactForm
           onSubmit={editItem}

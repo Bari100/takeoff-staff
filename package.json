@@ -34,7 +34,18 @@
       "airbnb/whitespace"
     ],
     "rules":  {
-      "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
+      "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+      "import/extensions": 0,
+      "no-param-reassign": ["error", { "props": false }],
+      "react/require-default-props": 0,
+      "jsx-a11y/label-has-associated-control": 0
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
     }
   },
   "browserslist": {

@@ -1,8 +1,10 @@
 import React, { FormEvent } from 'react';
-import { useAppDispatch } from '../../utils/hooks';
+import { selectAuthErrorData } from '../../redux/authSlice';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 
 function Login() {
   const dispatch = useAppDispatch();
+  const error = useAppSelector(selectAuthErrorData);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,8 +24,16 @@ function Login() {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type="email" name="email" />
-      <input type="password" name="password" />
+      <label>
+        <b>Email</b>
+        <input type="email" name="email" />
+        {error === 'Cannot find user' && <strong>{error}</strong>}
+      </label>
+      <label>
+        <b>Password</b>
+        <input type="password" name="password" />
+        {error === 'Incorrect password' && <strong>{error}</strong>}
+      </label>
       <button type="submit">submit</button>
     </form>
   );

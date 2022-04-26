@@ -14,8 +14,8 @@ interface ContactFormProps {
 function ContactForm({
   onSubmit,
   buttonText,
-  firstName,
-  lastName,
+  firstName = '',
+  lastName = '',
   cancelButton = false,
   formRef,
 }: ContactFormProps) {
