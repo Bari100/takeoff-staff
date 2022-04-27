@@ -71,7 +71,10 @@ function ContactsPage() {
   return (
     <>
       <div>
-        <input type="search" onChange={findItem} />
+        <label>
+          <b>Search</b>
+          <input type="search" onChange={findItem} />
+        </label>
         {!noSearchResults ? (
           <ContactsList
             contactsList={contactsList}

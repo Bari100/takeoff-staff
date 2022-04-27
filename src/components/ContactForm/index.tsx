@@ -23,8 +23,14 @@ function ContactForm({
 
   return (
     <form onSubmit={onSubmit} ref={formRef}>
-      <input type="text" name="firstName" defaultValue={firstName} required />
-      <input type="text" name="lastName" defaultValue={lastName} required />
+      <label>
+        <b>First Name</b>
+        <input type="text" name="firstName" defaultValue={firstName} required />
+      </label>
+      <label>
+        <b>Last Name</b>
+        <input type="text" name="lastName" defaultValue={lastName} required />
+      </label>
       <button type="submit">{buttonText}</button>
       {cancelButton
         && <button type="button" onClick={() => dispatch(setEditId(undefined))}>cancel</button>}
