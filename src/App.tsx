@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
-import ContactsList from './components/ContactsList';
+import ContactsPage from './components/ContactsPage';
 import { useAppSelector } from './utils/hooks';
 import { selectAuthResponseData } from './redux/authSlice';
 import './App.css';
@@ -22,7 +22,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="contacts" element={<ContactsList />} />
+        <Route path="contacts" element={<ContactsPage />} />
       </Routes>
     </div>
   );

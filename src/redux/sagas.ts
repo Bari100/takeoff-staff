@@ -19,12 +19,12 @@ interface AuthResponse {
   user: User
 }
 
-type ContactsResponse = ContactType[]
+type ContactsResponse = ContactType[];
 
 function* login({ user }: AnyAction): Generator<
-  CallEffect | Promise<AuthResponse> | PutEffect,
-  void,
-  Response & AuthResponse
+CallEffect | Promise<AuthResponse> | PutEffect,
+void,
+Response & AuthResponse
 > {
   const response = yield call(fetchAPI, 'login', 'POST', user);
   const data = yield response.json();
@@ -37,10 +37,10 @@ function* login({ user }: AnyAction): Generator<
 }
 
 function* getContacts(): Generator<
-  CallEffect | Promise<ContactsResponse> | PutEffect,
-  void,
-  Response & ContactsResponse
-  > {
+CallEffect | Promise<ContactsResponse> | PutEffect,
+void,
+Response & ContactsResponse
+> {
   const response = yield call(fetchAPI, 'contacts', 'GET');
   const data = yield response.json();
   if (response.ok) {
@@ -60,7 +60,7 @@ function* addContact({ contact }: AnyAction): Generator<CallEffect | PutEffect, 
 }
 
 function* removeContact({ contactId }: AnyAction): Generator<
-  CallEffect | PutEffect, void, Response
+CallEffect | PutEffect, void, Response
 > {
   const response = yield call(fetchAPI, `contacts/${contactId}`, 'DELETE');
   if (response.ok) {
@@ -81,7 +81,7 @@ function* editContact({ payload }: AnyAction): Generator<CallEffect | PutEffect,
 }
 
 function* findContact({ value }: AnyAction): Generator<
-  CallEffect | Promise<ContactsResponse> | PutEffect, void, Response & ContactsResponse
+CallEffect | Promise<ContactsResponse> | PutEffect, void, Response & ContactsResponse
 > {
   const response = yield call(fetchAPI, `contacts?q=${value}`, 'GET');
   const data = yield response.json();

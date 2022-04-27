@@ -31,19 +31,43 @@
       "react-app",
       "airbnb",
       "airbnb/hooks",
-      "airbnb/whitespace"
+      "airbnb/whitespace",
+      "airbnb-typescript"
     ],
-    "rules":  {
-      "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "rules": {
+      "react/jsx-filename-extension": [
+        2,
+        {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
+        }
+      ],
       "import/extensions": 0,
-      "no-param-reassign": ["error", { "props": false }],
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
       "react/require-default-props": 0,
       "jsx-a11y/label-has-associated-control": 0
     },
     "settings": {
       "import/resolver": {
         "node": {
-          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
         }
       }
     }
@@ -61,8 +85,11 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
     "eslint": "^8.14.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
