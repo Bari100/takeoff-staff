@@ -5,7 +5,9 @@ import {
 import { ContactType } from '../types/contacts';
 import fetchAPI from '../utils/fetchAPI';
 import { setAuthErrorData, setAuthResponseData } from './authSlice';
-import { setContactInteractionError, setContacts, setContactsError } from './contactsSlice';
+import {
+  setContactInteractionError, setContacts, setContactsError, setNoResults,
+} from './contactsSlice';
 
 interface User {
   email: string
@@ -78,6 +80,19 @@ function* editContact({ payload }: AnyAction): Generator<CallEffect | PutEffect,
   }
 }
 
+function* findContact({ value }: AnyAction): Generator<
+  CallEffect | Promise<ContactsResponse> | PutEffect, void, Response & ContactsResponse
+> {
+  const response = yield call(fetchAPI, `contacts?q=${value}`, 'GET');
+  const data = yield response.json();
+  if (response.ok) {
+    yield put(setContacts(data));
+    yield put(setNoResults(!data.length));
+  } else {
+    yield put(setContactInteractionError(true));
+  }
+}
+
 function* rootSaga() {
   yield all([
     takeEvery('LOGIN', login),
@@ -85,6 +100,7 @@ function* rootSaga() {
     takeEvery('ADD_CONTACT', addContact),
     takeEvery('REMOVE_CONTACT', removeContact),
     takeEvery('EDIT_CONTACT', editContact),
+    takeEvery('FIND_CONTACT', findContact),
   ]);
 }
 

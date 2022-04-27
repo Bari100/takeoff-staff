@@ -12,6 +12,7 @@ const initialState = {
   editId: -1,
   contactsError: false,
   contactInteractionError: false,
+  noResults: false,
 };
 
 export const contactsSlice = createSlice({
@@ -30,11 +31,14 @@ export const contactsSlice = createSlice({
     setContactInteractionError: (state, action) => {
       state.contactInteractionError = action.payload;
     },
+    setNoResults: (state, action) => {
+      state.noResults = action.payload;
+    },
   },
 });
 
 export const {
-  setContacts, setEditId, setContactsError, setContactInteractionError,
+  setContacts, setEditId, setContactsError, setContactInteractionError, setNoResults,
 } = contactsSlice.actions;
 
 export const selectContacts = (state: RootState) => state.contacts.contacts;
@@ -43,5 +47,6 @@ export const selectContactsError = (state: RootState) => state.contacts.contacts
 export const selectContactInteractionError = (state: RootState) => (
   state.contacts.contactInteractionError
 );
+export const selectNoResults = (state: RootState) => state.contacts.noResults;
 
 export default contactsSlice.reducer;

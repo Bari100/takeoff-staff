@@ -1,4 +1,5 @@
 import React, {
+  ChangeEvent,
   FormEvent, useEffect, useRef, useState,
 } from 'react';
 import Contact from './Contact';
@@ -6,7 +7,7 @@ import ContactForm from '../ContactForm';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import {
   selectContactInteractionError,
-  selectContacts, selectContactsError, selectEditId, setEditId,
+  selectContacts, selectContactsError, selectEditId, selectNoResults, setEditId,
 } from '../../redux/contactsSlice';
 import ErrorMessage from '../ErrorMessage';
 
@@ -19,6 +20,7 @@ function ContactsList() {
   const editId = useAppSelector(selectEditId);
   const contactsError = useAppSelector(selectContactsError);
   const contactInteractionError = useAppSelector(selectContactInteractionError);
+  const noResults = useAppSelector(selectNoResults);
 
   useEffect(() => {
     dispatch({ type: 'GET_CONTACTS' });
@@ -57,28 +59,41 @@ function ContactsList() {
     dispatch({ type: 'EDIT_CONTACT', payload: { contact, contactId } });
   };
 
+  const findItem = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { value } = e.target;
+    dispatch({ type: 'FIND_CONTACT', value });
+  };
+
   return (
     <>
       {!contactsError ? (
         <div>
-          <ul>
-            {contactsList.map((contactItem) => (
-              <Contact
-                key={contactItem.id}
-                contactId={contactItem.id}
-                setContactId={setId}
-                contactItem={contactItem}
-                removeItem={() => removeItem(contactItem.id)}
-                editId={editId}
-                editItem={editItem}
+          <input type="search" onChange={findItem} />
+          {!noResults ? (
+            <>
+              <ul>
+                {contactsList.map((contactItem) => (
+                  <Contact
+                    key={contactItem.id}
+                    contactId={contactItem.id}
+                    setContactId={setId}
+                    contactItem={contactItem}
+                    removeItem={() => removeItem(contactItem.id)}
+                    editId={editId}
+                    editItem={editItem}
+                  />
+                ))}
+              </ul>
+              <ContactForm
+                formRef={formRef}
+                onSubmit={addItem}
+                buttonText="add"
               />
-            ))}
-          </ul>
-          <ContactForm
-            formRef={formRef}
-            onSubmit={addItem}
-            buttonText="add"
-          />
+            </>
+          ) : (
+            <strong>No results</strong>
+          )}
         </div>
       ) : (
         <strong>{'Contacts can\'t be loaded'}</strong>
