@@ -1,6 +1,7 @@
 import React, { FormEvent } from 'react';
 import { selectAuthErrorData } from '../../redux/authSlice';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
+import css from './Login.module.scss';
 
 function Login() {
   const dispatch = useAppDispatch();
@@ -23,18 +24,20 @@ function Login() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <label>
-        <b>Email</b>
-        <input type="email" name="email" />
-        {error === 'Cannot find user' && <strong>{error}</strong>}
-      </label>
-      <label>
-        <b>Password</b>
-        <input type="password" name="password" />
-        {error === 'Incorrect password' && <strong>{error}</strong>}
-      </label>
-      <button type="submit">submit</button>
+    <form onSubmit={onSubmit} className={css.form}>
+      <div className={css.inputs}>
+        <label className={css.labelBlock}>
+          <b className={css.label}>Email</b>
+          <input type="email" name="email" className={css.input} />
+          {error === 'Cannot find user' && <strong className={css.errorMessage}>{error}</strong>}
+        </label>
+        <label className={css.labelBlock}>
+          <b className={css.label}>Password</b>
+          <input type="password" name="password" className={css.input} />
+          {error === 'Incorrect password' && <strong>{error}</strong>}
+        </label>
+      </div>
+      <button type="submit" className={css.submitButton}>submit</button>
     </form>
   );
 }
