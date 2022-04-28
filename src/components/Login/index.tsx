@@ -1,6 +1,7 @@
 import React, { FormEvent } from 'react';
 import { selectAuthErrorData } from '../../redux/authSlice';
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
+import Button from '../Button';
 import css from './Login.module.scss';
 
 function Login() {
@@ -24,20 +25,20 @@ function Login() {
   };
 
   return (
-    <form onSubmit={onSubmit} className={css.form}>
+    <form onSubmit={onSubmit} className={`${css.form}`}>
       <div className={css.inputs}>
         <label className={css.labelBlock}>
-          <b className={css.label}>Email</b>
+          <span className={css.label}>Email</span>
           <input type="email" name="email" className={css.input} />
           {error === 'Cannot find user' && <strong className={css.errorMessage}>{error}</strong>}
         </label>
         <label className={css.labelBlock}>
-          <b className={css.label}>Password</b>
+          <span className={css.label}>Password</span>
           <input type="password" name="password" className={css.input} />
           {error === 'Incorrect password' && <strong>{error}</strong>}
         </label>
       </div>
-      <button type="submit" className={css.submitButton}>submit</button>
+      <Button type="submit">submit</Button>
     </form>
   );
 }

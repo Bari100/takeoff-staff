@@ -9,6 +9,7 @@ import {
 } from '../../redux/contactsSlice';
 import ErrorMessage from '../ErrorMessage';
 import ContactsList from '../ContactsList';
+import css from './ContactsPage.module.scss';
 
 function ContactsPage() {
   const dispatch = useAppDispatch();
@@ -69,7 +70,7 @@ function ContactsPage() {
   }
 
   return (
-    <>
+    <div className={css.contactPage}>
       <div>
         <label>
           <b>Search</b>
@@ -90,7 +91,7 @@ function ContactsPage() {
         )}
       </div>
       {contactInteractionError && <ErrorMessage delay={5000} />}
-    </>
+    </div>
   );
 }
 
