@@ -1,6 +1,14 @@
 # takeoff-staff
 ## Setup
 
+### Node version
+
+```
+$ v16.14.2
+```
+
+### Steps
+
 ```
 $ cd takeoff-staff
 $ npm i
