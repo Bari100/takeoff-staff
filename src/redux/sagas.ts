@@ -3,7 +3,7 @@ import {
   all, call, CallEffect, put, PutEffect, takeEvery,
 } from 'redux-saga/effects';
 import { ContactType } from '../types/contacts';
-import fetchAPI from '../utils/fetchAPI';
+import { fetchAPI } from '../utils/fetchAPI';
 import { setAuthErrorData, setAuthResponseData } from './authSlice';
 import {
   setContactInteractionError, setContacts, setContactsError, setNoResults,
@@ -21,7 +21,7 @@ interface AuthResponse {
 
 type ContactsResponse = ContactType[];
 
-function* login({ user }: AnyAction): Generator<
+export function* login({ user }: AnyAction): Generator<
 CallEffect | Promise<AuthResponse> | PutEffect,
 void,
 Response & AuthResponse

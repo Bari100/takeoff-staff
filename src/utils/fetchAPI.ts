@@ -13,4 +13,4 @@ const fetchAPI = (route: string, method: string, body?: Record<string, string>) 
   );
 };
 
-export default fetchAPI;
+export { fetchAPI };
